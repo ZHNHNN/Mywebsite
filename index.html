@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="UX 交互体验设计师个人网页，线性风格 + Fluent 设计，玻璃拟物作品集。" />
+    <title>你的名字 · UX/交互体验设计师</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- 使用系统字体优先，避免强依赖网络 -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- 背景弥散灯光层 -->
+    <div class="bg">
+      <div class="blob b1" aria-hidden="true"></div>
+      <div class="blob b2" aria-hidden="true"></div>
+      <div class="blob b3" aria-hidden="true"></div>
+    </div>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="主页">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span class="brand-text">张浩南</span>
+      </a>
+      <nav class="nav" aria-label="主导航">
+        <a href="#work">交互设计</a>
+        <a href="#work-industrial">产品</a>
+        <a href="#work-visual">视觉</a>
+        <a href="#photo">摄影</a>
+        <a href="#about">关于</a>
+        <a href="#contact">联系</a>
+
+      </nav>
+    </header>
+
+    <main id="top" class="site-main">
+      <div class="main-container">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-content">
+          <h1 id="hero-title">你好我是<span class="accent">张浩南</span></h1>
+          <p class="subtitle">2026届硕士应届生，关注AI、Agent交互、体验设计领域</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#work">浏览作品</a>
+            <a class="btn btn-ghost" href="#contact">预约沟通</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="work" class="section work" aria-labelledby="work-title">
+        <div class="section-head">
+          <h2 id="work-title">交互设计作品集</h2>
+
+        </div>
+        <div class="projects-grid">
+          <!-- 卡片示例 1 -->
+          <article class="card project" tabindex="0">
+            <div class="thumb t1" role="img" aria-label="企业协作平台信息架构重设计预览"></div>
+            <div class="card-body">
+              <h3 class="card-title">SENTIRE</h3>
+              <p class="card-desc">Agent时代的网络IT运维助手。</p>
+              <div class="chips">
+                <span class="chip">Agent</span>
+                <span class="chip">AI交互</span>
+                <span class="chip">IT运维</span>
+                <span class="chip">网络性能</span>
+              </div>
+            </div>
+            <footer class="card-foot">
+              <span class="meta">2024 · B2B SaaS</span>
+              <a class="link" href="gallery.html" aria-label="查看案例：企业协作平台 IA 重设计">查看</a>
+            </footer>
+            <!-- 让整卡可点：覆盖式跳转链接 -->
+            <a class="stretched" href="gallery.html" aria-hidden="true" tabindex="-1"></a>
+          </article>
+
+          
+        </div>
+      </section>
+
+      <!-- 摄影作品集 -->
+      <section id="photo" class="section work" aria-labelledby="photo-title">
+        <div class="section-head">
+          <div class="head-row">
+            <h2 id="photo-title">摄影作品集</h2>
+            <div class="photo-logos frame" aria-label="签约平台">
+              <img src="logo/签约logo.png" alt="签约平台"/>
+            </div>
+          </div>
+          <p class="section-sub">视觉中国签约摄影师、图虫签约摄影师、站酷海洛签约摄影师、NISI地标供稿人</p>
+        </div>
+        <div class="projects-grid"></div>
+      </section>
+
+      <section id="about" class="section about" aria-labelledby="about-title">
+        <div class="section-head">
+          <h2 id="about-title">关于我</h2>
+          <p class="section-sub">秩序感、速度感、质感</p>
+        </div>
+        <div class="about-content card">
+          <p>
+            我专注复杂系统的体验设计：任务驱动的信息架构、以人为本的交互、可达性的细节与一致的动效语言。
+            设计风格融合 Linear 的轻与快、以及微软 Fluent 的材料与动线，追求顺手、顺眼、顺心。
+          </p>
+          <ul class="bullet">
+            <li>SaaS / B端平台 / 移动端</li>
+            <li>设计系统与组件规范</li>
+            <li>研究：可用性测试、启发式评估</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="contact" class="section contact" aria-labelledby="contact-title">
+        <div class="section-head">
+          <h2 id="contact-title">联系</h2>
+          <p class="section-sub">欢迎合作与交流</p>
+        </div>
+        <div class="contact-card card">
+          <p>邮箱：<a class="link" href="mailto:1795620132@qq.com">1795620132@qq.com</a></p>
+          <div class="social-links">
+            <a class="social-link" href="https://www.douyin.com/user/MS4wLjABAAAAdhkhoSRDRrOIRdFL_xBil9kRpF7yuWbqD_0p6yRdQizsBvsiRdFElC4mFxNCAL-p" target="_blank" aria-label="抖音">
+              <img src="logo/抖音.svg" alt="抖音" />
+            </a>
+            <a class="social-link" href="https://www.xiaohongshu.com/user/profile/6040fbc50000000001003bfb" target="_blank" aria-label="小红书">
+              <img src="logo/小红书.svg" alt="小红书" />
+            </a>
+            <a class="social-link" href="https://github.com/ZHNHNN" target="_blank" aria-label="GitHub">
+              <img src="logo/Github.svg" alt="GitHub" />
+            </a>
+          </div>
+        </div>
+      </section>
+      </div>
+    </main>
+
+    <footer class="site-foot">
+      <small>© <span id="y"></span> 张浩南 设计作品集</small>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+  </html>

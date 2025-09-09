@@ -1,0 +1,75 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>城市 · 摄影作品集</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="index.html#photo" aria-label="返回主页">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span class="brand-text">你的名字</span>
+      </a>
+      <nav class="nav" aria-label="主导航">
+        <a href="index.html#work">作品</a>
+        <a href="index.html#work-visual">视觉传达</a>
+        <a href="index.html#photo">摄影</a>
+        <a href="index.html#about">关于</a>
+        <a href="index.html#contact">联系</a>
+        <button class="theme-toggle" type="button" aria-label="切换主题" title="切换明暗主题">
+          <svg class="icon sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.48 0l1.79-1.8 1.41 1.41-1.8 1.79-1.4-1.4zM12 4V1h0v3h0zm0 19v-3h0v3h0zM4 12H1v0h3v0zm19 0h-3v0h3v0zM6.76 19.16l-1.42 1.42-1.79-1.8 1.41-1.41 1.8 1.79zm12.69-1.79l1.41 1.41-1.79 1.8-1.41-1.42 1.79-1.79zM12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+          <svg class="icon moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.64 13a9 9 0 11-10.63-10 7 7 0 1010.63 10z"/></svg>
+        </button>
+      </nav>
+    </header>
+
+    <main class="section" aria-labelledby="city-title">
+      <div class="section-head">
+        <div class="head-row">
+          <div class="left-inline">
+            <button id="btnBack" class="icon-btn" title="返回" aria-label="返回">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6v12z"/></svg>
+            </button>
+            <h1 id="city-title">城市 · 摄影作品集</h1>
+          </div>
+          <div class="tools-inline">
+            <button id="btnH" class="icon-btn" aria-pressed="true" title="横向 Horizontal" aria-label="横向">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v10H4z"/></svg>
+            </button>
+            <button id="btnV" class="icon-btn" aria-pressed="false" title="竖向 Vertical" aria-label="竖向">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v16H7z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="cityGrid" class="projects-grid city-grid" role="list"></div>
+      <div id="cityVerticalGrid" class="projects-grid city-grid-vertical city-vertical-override" role="list" style="display:none"></div>
+    </main>
+
+    <!-- 共享 Lightbox（与工业页一致） -->
+    <div id="lightbox" class="lightbox" aria-hidden="true" aria-modal="true" role="dialog">
+      <button class="lb-close" aria-label="关闭">×</button>
+      <button class="lb-prev" aria-label="上一张">‹</button>
+      <img class="lb-img" alt="预览" />
+      <button class="lb-next" aria-label="下一张">›</button>
+      <div class="lb-count" aria-live="polite"></div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="photo-city.v2.js?v=14"></script>
+    <script>
+      (function(){
+        var back = document.getElementById('btnBack');
+        if(back){ back.addEventListener('click', function(){
+          if (window.history.length > 1) { window.history.back(); }
+          else { window.location.href = 'index.html#photo'; }
+        }); }
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>摄影相册 · 你的名字</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="index.html#photo" aria-label="返回主页">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span class="brand-text">你的名字</span>
+      </a>
+      <nav class="nav" aria-label="主导航">
+        <a href="index.html#work">作品</a>
+        <a href="index.html#about">关于</a>
+        <a href="index.html#contact">联系</a>
+        <button class="theme-toggle" type="button" aria-label="切换主题" title="切换明暗主题">
+          <svg class="icon sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.48 0l1.79-1.8 1.41 1.41-1.8 1.79-1.4-1.4zM12 4V1h0v3h0zm0 19v-3h0v3h0zM4 12H1v0h3v0zm19 0h-3v0h3v0zM6.76 19.16l-1.42 1.42-1.79-1.8 1.41-1.41 1.8 1.79zm12.69-1.79l1.41 1.41-1.79 1.8-1.41-1.42 1.79-1.79zM12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+          <svg class="icon moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.64 13a9 9 0 11-10.63-10 7 7 0 1010.63 10z"/></svg>
+        </button>
+      </nav>
+    </header>
+
+    <main class="section gallery" aria-labelledby="gallery-title">
+      <div class="section-head">
+        <div class="head-row">
+          <div class="left-inline">
+            <button id="btnBack" class="icon-btn" title="返回" aria-label="返回">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6v12z"/></svg>
+            </button>
+            <h1 id="gallery-title">摄影相册</h1>
+          </div>
+        </div>
+        <p id="gallery-sub" class="section-sub"></p>
+      </div>
+
+      <div id="gallery" class="gallery-grid" role="list"></div>
+    </main>
+
+    <!-- 轻量 Lightbox -->
+    <div id="lightbox" class="lightbox" aria-hidden="true" aria-modal="true" role="dialog">
+      <button class="lb-close" aria-label="关闭">×</button>
+      <button class="lb-prev" aria-label="上一张">‹</button>
+      <img class="lb-img" alt="预览" />
+      <button class="lb-next" aria-label="下一张">›</button>
+      <div class="lb-count" aria-live="polite"></div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="photo-portfolio.js"></script>
+    <script>
+      (function() {
+        const qs = new URLSearchParams(location.search);
+        const albumName = qs.get('album');
+        const gallery = document.getElementById('gallery');
+        const title = document.getElementById('gallery-title');
+        const sub = document.getElementById('gallery-sub');
+
+        const nameMap = {
+          "City": "城市",
+          "Natural": "自然",
+          "Campus": "校园",
+          "Aerial Photography": "航拍",
+          "Culture": "人文、纪实",
+          "Animal": "动物"
+        };
+
+        function naturalSort(arr, getName){
+          const re = /^(\d+(?:\.\d+)*)(?=[-_.\s]|$)/;
+          function segs(s){ return s.split('.').map(n=>parseInt(n,10)); }
+          function cmp(a,b){
+            const na = getName(a);
+            const nb = getName(b);
+            const ma = na.match(re);
+            const mb = nb.match(re);
+            if(ma && mb){
+              const aa = segs(ma[1]);
+              const bb = segs(mb[1]);
+              const len = Math.max(aa.length, bb.length);
+              for(let i=0;i<len;i++){
+                const x = aa[i] ?? 0; const y = bb[i] ?? 0;
+                if(x!==y) return x - y;
+              }
+              return na.localeCompare(nb, undefined, {numeric:true, sensitivity:'base'});
+            }
+            if(ma && !mb) return -1;
+            if(!ma && mb) return 1;
+            return na.localeCompare(nb, undefined, {numeric:true, sensitivity:'base'});
+          }
+          return arr.slice().sort(cmp);
+        }
+
+        function createWide(url){
+          var art = document.createElement('a');
+          art.href = url;
+          art.className = 'g-item card wide';
+          var frame = document.createElement('div');
+          frame.className = 'frame';
+          var img = document.createElement('img');
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          img.src = encodeURI(url);
+          img.alt = 'Wide';
+          img.onerror = function() {
+            console.error('Failed to load image:', url);
+          };
+          img.onload = function() {
+            console.log('Successfully loaded image:', url);
+          };
+          frame.appendChild(img);
+          art.appendChild(frame);
+          return art;
+        }
+
+        function renderAlbum(album) {
+          const displayName = nameMap[album.name] || album.name;
+          if (title) title.textContent = displayName;
+
+          const sortedImages = naturalSort(album.images, s => s.split('/').pop());
+
+          if (sub) sub.textContent = `共 ${sortedImages.length} 张图片`;
+
+          if (gallery) {
+            if (album.name === 'Natural') {
+              gallery.classList.add('natural-layout');
+              // 为自然相册添加特殊布局
+              renderNaturalAlbum(sortedImages, displayName);
+              return;
+            } else if (album.name === 'Aerial Photography') {
+              gallery.classList.add('aerial-layout');
+              // 为航拍相册添加特殊布局
+              renderAerialAlbum(sortedImages, displayName);
+              return;
+            } else {
+              gallery.classList.add('masonry-layout');
+            }
+          }
+
+          // 普通相册的渲染逻辑
+          const frag = document.createDocumentFragment();
+          sortedImages.forEach((src, idx) => {
+            const item = document.createElement('a');
+            item.href = src;
+            item.className = 'g-item card';
+            const frame = document.createElement('div');
+            frame.className = 'frame';
+            const img = document.createElement('img');
+            img.loading = 'lazy';
+            img.decoding = 'async';
+            img.src = src;
+            img.alt = `${displayName} ${idx + 1}`;
+            frame.appendChild(img);
+            item.appendChild(frame);
+            item.setAttribute('role', 'listitem');
+            item.dataset.index = idx;
+            frag.appendChild(item);
+          });
+
+          gallery.appendChild(frag);
+          bindLightbox(sortedImages);
+        }
+
+        function renderAerialAlbum(images, displayName) {
+          const frag = document.createDocumentFragment();
+          
+          images.forEach((src, idx) => {
+            const fileName = src.split('/').pop();
+            const fileNumber = parseInt(fileName.split('.')[0], 10);
+            
+            let item;
+            // 3-10号图片作为宽图显示
+            if (fileNumber >= 3 && fileNumber <= 10) {
+              item = createWide(src);
+              item.style.marginBottom = '24px';
+            } else {
+              // 其他图片使用普通样式
+              item = document.createElement('a');
+              item.href = src;
+              item.className = 'g-item card';
+              const frame = document.createElement('div');
+              frame.className = 'frame';
+              const img = document.createElement('img');
+              img.loading = 'lazy';
+              img.decoding = 'async';
+              img.src = src;
+              img.alt = `${displayName} ${idx + 1}`;
+              frame.appendChild(img);
+              item.appendChild(frame);
+              item.style.marginBottom = '16px';
+            }
+            
+            item.setAttribute('role', 'listitem');
+            item.dataset.index = idx;
+            frag.appendChild(item);
+          });
+
+          gallery.appendChild(frag);
+          bindLightbox(images);
+        }
+
+        function renderNaturalAlbum(images, displayName) {
+          const frag = document.createDocumentFragment();
+          
+          // 第一张图片作为宽图显示
+          if (images.length > 0) {
+            const wideItem = createWide(images[0]);
+            wideItem.setAttribute('role', 'listitem');
+            wideItem.dataset.index = 0;
+            frag.appendChild(wideItem);
+          }
+
+          // 其余图片使用瀑布流布局的容器
+          if (images.length > 1) {
+            const masonryContainer = document.createElement('div');
+            masonryContainer.className = 'masonry-layout';
+            masonryContainer.style.marginTop = '24px';
+            
+            images.slice(1).forEach((src, idx) => {
+              const realIdx = idx + 1; // 因为第一张图片单独处理了
+              const item = document.createElement('a');
+              item.href = src;
+              item.className = 'g-item card';
+              const frame = document.createElement('div');
+              frame.className = 'frame';
+              const img = document.createElement('img');
+              img.loading = 'lazy';
+              img.decoding = 'async';
+              img.src = src;
+              img.alt = `${displayName} ${realIdx + 1}`;
+              frame.appendChild(img);
+              item.appendChild(frame);
+              item.setAttribute('role', 'listitem');
+              item.dataset.index = realIdx;
+              masonryContainer.appendChild(item);
+            });
+            
+            frag.appendChild(masonryContainer);
+          }
+
+          gallery.appendChild(frag);
+          bindLightbox(images);
+        }
+
+        function bindLightbox(list){
+          const box = document.getElementById('lightbox');
+          const img = box.querySelector('.lb-img');
+          const prev = box.querySelector('.lb-prev');
+          const next = box.querySelector('.lb-next');
+          const close = box.querySelector('.lb-close');
+          const count = box.querySelector('.lb-count');
+          let i = 0;
+
+          function openAt(index, href){
+            i = index;
+            img.src = href;
+            box.setAttribute('aria-hidden','false');
+            box.classList.add('show');
+            box.scrollTop = 0;
+            updateCount();
+          }
+          function updateCount(){ count.textContent = `${i+1} / ${list.length}`; }
+          function showPrev(){ if(i>0){ i--; img.src = list[i]; box.scrollTop = 0; updateCount(); } }
+          function showNext(){ if(i<list.length-1){ i++; img.src = list[i]; box.scrollTop = 0; updateCount(); } }
+          function closeBox(){ box.classList.remove('show'); box.setAttribute('aria-hidden','true'); img.src = ''; }
+
+          gallery.querySelectorAll('a.g-item').forEach(a=>{
+            a.addEventListener('click', (e)=>{
+              e.preventDefault();
+              const idx = parseInt(a.dataset.index,10) || 0;
+              openAt(idx, a.href);
+            });
+          });
+          prev.addEventListener('click', showPrev);
+          next.addEventListener('click', showNext);
+          close.addEventListener('click', closeBox);
+          box.addEventListener('click', (e)=>{ if(e.target === box) closeBox(); });
+          window.addEventListener('keydown', (e)=>{
+            if(box.classList.contains('show')){
+              if(e.key === 'Escape') closeBox();
+              if(e.key === 'ArrowLeft') showPrev();
+              if(e.key === 'ArrowRight') showNext();
+            }
+          });
+        }
+
+        if (window.photoPortfolio && albumName) {
+          const album = window.photoPortfolio.albums.find(a => a.name === albumName);
+          if (album) {
+            renderAlbum(album);
+          } else {
+            if (gallery) gallery.innerHTML = '<p class="section-sub">未找到相册。</p>';
+          }
+        } else {
+          if (gallery) gallery.innerHTML = '<p class="section-sub">加载相册数据失败。</p>';
+        }
+
+        document.getElementById('btnBack')?.addEventListener('click', () => {
+          if (window.history.length > 1) window.history.back();
+          else location.href = 'index.html#photo';
+        });
+      })();
+    </script>
+  </body>
+</html>
