@@ -183,8 +183,9 @@ if(yearEl) yearEl.textContent = new Date().getFullYear();
   if(workTitle){ workTitle.textContent = '交互设计作品集'; }
 
   // 2) 创建各个分区
-  const aboutSection = document.getElementById('about');
+  const contactSection = document.getElementById('contact'); // 现在以联系区域为参考
   const workSection = document.getElementById('work');
+  const photoSection = document.getElementById('photo');
   
   // 创建工业设计作品集分区
   const container = document.createElement('section');
@@ -210,28 +211,18 @@ if(yearEl) yearEl.textContent = new Date().getFullYear();
     '<div id="visual-grid" class="projects-grid visual-covers-grid"></div>'
   ].join('');
   
-  // 按顺序插入分区：交互 -> 工业 -> 摄影 -> 视觉 -> 关于
-  if(aboutSection && aboutSection.parentNode){ 
-    // 首先插入工业设计分区
-    aboutSection.parentNode.insertBefore(container, aboutSection);
-    
-    // 获取摄影分区并重新定位
-    const photoSection = document.getElementById('photo');
-    if(photoSection) {
-      aboutSection.parentNode.insertBefore(photoSection, aboutSection);
-    }
-    
-    // 最后插入视觉分区
-    aboutSection.parentNode.insertBefore(visualContainer, aboutSection);
-  } else if(workSection && workSection.parentNode){ 
+  // 按正确顺序插入：交互设计 -> 工业设计 -> 视觉 -> 摄影 -> 联系
+  if(workSection && workSection.parentNode){
+    // 在交互设计后插入工业设计
     workSection.parentNode.insertBefore(container, workSection.nextSibling);
     
-    const photoSection = document.getElementById('photo');
-    if(photoSection) {
-      workSection.parentNode.insertBefore(photoSection, workSection.nextSibling);
-    }
+    // 在工业设计后插入视觉
+    container.parentNode.insertBefore(visualContainer, container.nextSibling);
     
-    workSection.parentNode.insertBefore(visualContainer, workSection.nextSibling);
+    // 将摄影移动到视觉后面（在联系前面）
+    if(photoSection && contactSection) {
+      contactSection.parentNode.insertBefore(photoSection, contactSection);
+    }
   }
 
   // 3) 加载工业设计清单并渲染卡片（优先使用 JS 清单，避免本地 file:// fetch 受限）
