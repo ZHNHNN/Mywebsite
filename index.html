@@ -28,9 +28,11 @@
         <a href="#work-industrial">产品</a>
         <a href="#work-visual">视觉</a>
         <a href="#photo">摄影</a>
-        <a href="#about">关于</a>
         <a href="#contact">联系</a>
-
+        <button class="theme-toggle" type="button" aria-label="切换主题" title="切换明暗主题">
+          <svg class="icon sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.48 0l1.79-1.8 1.41 1.41-1.8 1.79-1.4-1.4zM12 4V1h0v3h0zm0 19v-3h0v3h0zM4 12H1v0h3v0zm19 0h-3v0h3v0zM6.76 19.16l-1.42 1.42-1.79-1.8 1.41-1.41 1.8 1.79zm12.69-1.79l1.41 1.41-1.79 1.8-1.41-1.42 1.79-1.79zM12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+          <svg class="icon moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.64 13a9 9 0 11-10.63-10 7 7 0 1010.63 10z"/></svg>
+        </button>
       </nav>
     </header>
 
@@ -38,11 +40,18 @@
       <div class="main-container">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-content">
-          <h1 id="hero-title">你好我是<span class="accent">张浩南</span></h1>
-          <p class="subtitle">2026届硕士应届生，关注AI、Agent交互、体验设计领域</p>
-          <div class="hero-cta">
-            <a class="btn btn-primary" href="#work">浏览作品</a>
-            <a class="btn btn-ghost" href="#contact">预约沟通</a>
+          <div class="hero-left">
+            <h1 id="hero-title">你好我是<span class="accent">张浩南</span></h1>
+            <p class="subtitle">2026届硕士应届生，关注AI、Agent交互、体验设计领域</p>
+            <div class="hero-cta">
+              <a class="btn btn-primary" href="#work">浏览作品</a>
+              <a class="btn btn-ghost" href="#contact">预约沟通</a>
+            </div>
+          </div>
+          <div class="hero-right">
+            <div class="hero-profile-card card" id="hero-profile-card">
+              <img src="个人介绍页-暗模式.jpg" alt="个人介绍" class="hero-profile-img" />
+            </div>
           </div>
         </div>
       </section>
@@ -92,24 +101,6 @@
         <div class="projects-grid"></div>
       </section>
 
-      <section id="about" class="section about" aria-labelledby="about-title">
-        <div class="section-head">
-          <h2 id="about-title">关于我</h2>
-          <p class="section-sub">秩序感、速度感、质感</p>
-        </div>
-        <div class="about-content card">
-          <p>
-            我专注复杂系统的体验设计：任务驱动的信息架构、以人为本的交互、可达性的细节与一致的动效语言。
-            设计风格融合 Linear 的轻与快、以及微软 Fluent 的材料与动线，追求顺手、顺眼、顺心。
-          </p>
-          <ul class="bullet">
-            <li>SaaS / B端平台 / 移动端</li>
-            <li>设计系统与组件规范</li>
-            <li>研究：可用性测试、启发式评估</li>
-          </ul>
-        </div>
-      </section>
-
       <section id="contact" class="section contact" aria-labelledby="contact-title">
         <div class="section-head">
           <h2 id="contact-title">联系</h2>
@@ -117,6 +108,8 @@
         </div>
         <div class="contact-card card">
           <p>邮箱：<a class="link" href="mailto:1795620132@qq.com">1795620132@qq.com</a></p>
+          <p>电话：<a class="link" href="tel:17347301280">17347301280</a></p>
+          <p>微信：zhn17347301280</p>
           <div class="social-links">
             <a class="social-link" href="https://www.douyin.com/user/MS4wLjABAAAAdhkhoSRDRrOIRdFL_xBil9kRpF7yuWbqD_0p6yRdQizsBvsiRdFElC4mFxNCAL-p" target="_blank" aria-label="抖音">
               <img src="logo/抖音.svg" alt="抖音" />
@@ -132,6 +125,12 @@
       </section>
       </div>
     </main>
+
+    <!-- 轻量 Lightbox -->
+    <div id="profile-lightbox" class="lightbox" aria-hidden="true" aria-modal="true" role="dialog">
+      <button class="lb-close" aria-label="关闭">&times;</button>
+      <img class="lb-img" alt="个人介绍详情" />
+    </div>
 
     <footer class="site-foot">
       <small>© <span id="y"></span> 张浩南 设计作品集</small>

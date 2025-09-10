@@ -98,6 +98,47 @@
 const yearEl = document.getElementById('y');
 if(yearEl) yearEl.textContent = new Date().getFullYear();
 
+// 个人介绍图片点击放大功能
+(function(){
+  const profileCard = document.getElementById('hero-profile-card');
+  const lightbox = document.getElementById('profile-lightbox');
+  const lightboxImg = lightbox?.querySelector('.lb-img');
+  const closeBtn = lightbox?.querySelector('.lb-close');
+  
+  if (!profileCard || !lightbox || !lightboxImg || !closeBtn) return;
+  
+  function openLightbox() {
+    // 根据当前主题设置图片源
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const isDark = currentTheme === 'dark' || 
+      (currentTheme !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    
+    lightboxImg.src = isDark ? '个人介绍页-暗模式.jpg' : '个人介绍页-亮模式.jpg';
+    lightbox.setAttribute('aria-hidden', 'false');
+    lightbox.classList.add('show');
+  }
+  
+  function closeLightbox() {
+    lightbox.classList.remove('show');
+    lightbox.setAttribute('aria-hidden', 'true');
+    lightboxImg.src = '';
+  }
+  
+  // 点击事件
+  profileCard.addEventListener('click', openLightbox);
+  closeBtn.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  
+  // ESC键关闭
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('show')) {
+      closeLightbox();
+    }
+  });
+})();
+
 // 顶部 LOGO：优先使用 logo 目录下的 SVG，其次回退到白底透明 PNG
 (function(){
   const brand = document.querySelector('.brand');

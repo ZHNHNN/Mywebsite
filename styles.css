@@ -12,9 +12,27 @@ ul[role='list'],ol[role='list']{list-style:none}
 img{max-width:100%;display:block}
 button,input,select,textarea{font:inherit}
 
+/* 自定义字体定义 */
+@font-face {
+  font-family: 'DingTalk JinBuTi';
+  src: url('fonts/DingTalk JinBuTi.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DingTalk JinBuTi';
+  src: url('fonts/DingTalk JinBuTi.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* 设计 Tokens */
 :root{
   --font-sans: ui-sans-serif, system-ui, "Segoe UI Variable", SegoeUI, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-heading: 'DingTalk JinBuTi', var(--font-sans);
   --radius-1: 8px;
   --radius-2: 12px;
   --radius-3: 16px;
@@ -109,6 +127,13 @@ body{
 .site-header{position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; gap:var(--space-4); padding:var(--space-4) max(24px, 6vw); backdrop-filter:saturate(1.2) blur(10px); background: linear-gradient(180deg, var(--glass), transparent); border-bottom:1px solid var(--border)}
 .brand{display:flex; align-items:center; gap:10px; color:inherit; text-decoration:none; font-weight:600; letter-spacing:.2px}
 .brand-logo{height:24px; width:auto; display:block}
+/* Logo 在亮模式下调整为黑色 */
+html[data-theme="light"] .brand-logo {
+  filter: brightness(0) invert(0); /* 转为黑色 */
+}
+html[data-theme="dark"] .brand-logo {
+  filter: none; /* 保持原色（白色） */
+}
 .brand-dot{width:10px; height:10px; border-radius:50%; background: radial-gradient(circle at 35% 35%, #fff, #7c9cff 70%); box-shadow:0 0 16px #7c9cffaa}
 .nav a{color:var(--text-dim); text-decoration:none; margin-inline:10px; transition: color var(--dur) var(--easing)}
 .nav a:hover{color:var(--text)}
@@ -121,8 +146,89 @@ body{
 
 /* 首屏 */
 .hero{padding: clamp(64px, 12vh, 160px) 0 24px;}
-.hero-content{padding: 0; text-align: left;}
-.hero h1{font-size: clamp(28px, 5vw, 56px); line-height:1.1; letter-spacing:-0.02em; font-weight:800}
+.hero-content{
+  padding: 0; 
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: center;
+}
+
+.hero-left {
+  text-align: left;
+}
+
+.hero-right {
+  min-width: 320px;
+}
+
+.hero-profile-card {
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--radius-3);
+  aspect-ratio: 16 / 9;
+  width: 320px;
+  cursor: pointer;
+  transition: transform var(--dur) var(--easing), box-shadow var(--dur) var(--easing);
+}
+
+.hero-profile-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,.15);
+}
+
+.hero-profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 首屏个人介绍图片主题适配 */
+html[data-theme="light"] .hero-profile-img {
+  content: url('个人介绍页-亮模式.jpg');
+}
+
+html[data-theme="dark"] .hero-profile-img {
+  content: url('个人介绍页-暗模式.jpg');
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    text-align: center;
+  }
+  
+  .hero-left {
+    text-align: center;
+  }
+  
+  .hero-right {
+    justify-self: center;
+    width: 100%; /* 与主内容容器宽度保持一致 */
+    min-width: unset;
+  }
+  
+  .hero-profile-card {
+    width: 100%; /* 占满容器宽度 */
+    max-width: 100%; /* 确保不超出容器 */
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-right {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  .hero-profile-card {
+    width: 100%;
+  }
+}
+
+.hero h1{font-family: var(--font-heading); font-size: clamp(28px, 5vw, 56px); line-height:1.1; letter-spacing:-0.02em; font-weight:600}
 .hero .accent{color:var(--accent)}
 .subtitle{margin-top:16px; color:var(--text-dim); font-size: clamp(15px, 2.2vw, 18px)}
 .hero-cta{display:flex; gap:12px; margin-top:20px}
@@ -139,7 +245,7 @@ body{
 /* Section 通用 */
 .section{padding: var(--space-8) 0}
 .section-head{padding: 0 0 18px}
-.section h2{font-size: clamp(22px, 3.5vw, 32px)}
+.section h2{font-family: var(--font-heading); font-size: clamp(22px, 3.5vw, 32px); font-weight: 500}
 .section-sub{color:var(--text-dim); margin-top:4px}
 
 /* 玻璃卡片网格 */
@@ -181,7 +287,7 @@ body{
 }
 
 .card-body{padding: 14px 16px 8px}
-.card-title{font-size: 18px; font-weight:700; letter-spacing:.2px}
+.card-title{font-family: var(--font-heading); font-size: 18px; font-weight:500; letter-spacing:.2px}
 .card-desc{margin-top:6px; color:var(--text-dim)}
 .chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px}
 .chip{padding:4px 10px; border-radius:999px; background: color-mix(in srgb, var(--glass), transparent 20%); border:1px solid color-mix(in srgb, var(--border), transparent 10%); font-size:12px; color:var(--text-dim)}
@@ -244,6 +350,15 @@ body{
   filter: brightness(0) invert(1);
 }
 
+/* 亮模式下GitHub图标修改为黑色 */
+html[data-theme="light"] .social-link img[alt="GitHub"] {
+  filter: brightness(0) invert(0);
+}
+
+html[data-theme="dark"] .social-link img[alt="GitHub"] {
+  filter: brightness(0) invert(1);
+}
+
 /* 页脚 */
 .site-foot{padding: 40px max(24px, 6vw); text-align:center; color:var(--text-dim)}
 
@@ -257,8 +372,27 @@ body{
 .project:hover .thumb{filter: saturate(1.05)}
 
 /* 主题切换（JS 动态设置 data-theme）*/
-html[data-theme="dark"]{color-scheme: dark}
-html[data-theme="light"]{color-scheme: light}
+html[data-theme="dark"]{
+  color-scheme: dark;
+  --bg: #0b0d10;
+  --surface: rgba(255,255,255,0.06);
+  --glass: rgba(255,255,255,0.08);
+  --text: #e6e9ef;
+  --text-dim: #aab0bb;
+  --border: rgba(255,255,255,0.24);
+  --shadow: 0 2px 6px rgba(0,0,0,.25), 0 8px 24px rgba(0,0,0,.35);
+}
+
+html[data-theme="light"]{
+  color-scheme: light;
+  --bg: #f6f7fb;
+  --surface: rgba(0,0,0,0.03);
+  --glass: rgba(255,255,255,0.55);
+  --text: #0b0d10;
+  --text-dim: #4d5560;
+  --border: rgba(0,0,0,0.06);
+  --shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 30px rgba(0,0,0,.08);
+}
 
 /* 锚点滚动抵消 sticky header */
 .section{scroll-margin-top: 80px}
@@ -556,12 +690,90 @@ html[data-effects="low"] .bg::after{opacity:.06; filter: blur(90px); animation:n
 html[data-effects="low"] .card{backdrop-filter:none !important}
 html[data-effects="low"] .site-header{backdrop-filter:none; background: color-mix(in srgb, var(--surface), transparent 10%)}
 
+/* 个人介绍图片lightbox样式 */
+#profile-lightbox .lb-img {
+  transition: opacity var(--dur) var(--easing);
+}
+
+/* 个人介绍图片主题适配 - lightbox中 */
+html[data-theme="light"] #profile-lightbox .lb-img {
+  content: url('个人介绍页-亮模式.jpg');
+}
+
+html[data-theme="dark"] #profile-lightbox .lb-img {
+  content: url('个人介绍页-暗模式.jpg');
+}
+
 /* 摄影作品集标题右侧合作平台徽标 */
 #photo .section-head{ position:relative }
-#photo .section-head .head-row{ display:flex; align-items:center; justify-content:space-between; gap:12px }
-#photo .photo-logos{ position:absolute; right:0; bottom:18px }
-#photo .photo-logos.frame{ display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:10px; background: var(--surface); border:1px solid var(--border) }
-#photo .photo-logos img{ height: 18px; width:auto; display:block; opacity:1 }
-@media (min-width:1080px){ #photo .photo-logos img{ height: 22px } }
+#photo .section-head .head-row{ 
+  display:flex; 
+  align-items:flex-start; 
+  justify-content:space-between; 
+  gap:12px;
+  flex-wrap: wrap; /* 允许换行 */
+}
+
+/* 在大屏幕上保持水平布局 */
+@media (min-width: 768px) {
+  #photo .section-head .head-row {
+    align-items:center;
+    flex-wrap: nowrap;
+  }
+  #photo .photo-logos{ 
+    position:absolute; 
+    right:0; 
+    bottom:18px;
+  }
+}
+
+/* 在小屏幕上使用flex布局，避免重叠 */
+@media (max-width: 767px) {
+  #photo .section-head .head-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  #photo .photo-logos{ 
+    position: static;
+    margin-top: 8px;
+  }
+}
+
+#photo .photo-logos.frame{ 
+  display:flex; 
+  align-items:center; 
+  gap:8px; 
+  padding:7px 10px; 
+  border-radius:10px; 
+  background: var(--surface); 
+  border:1px solid var(--border);
+  flex-shrink: 0; /* 防止图标被压缩 */
+}
+
+#photo .photo-logos img{ 
+  height: 16px; 
+  width:auto; 
+  display:block; 
+  opacity:1;
+}
+
+/* 摄影作品集签约平台图片主题适配 */
+html[data-theme="light"] #photo .photo-logos img {
+  content: url('logo/签约logo-亮模式.png');
+}
+
+html[data-theme="dark"] #photo .photo-logos img {
+  content: url('logo/签约logo.png');
+}
+@media (min-width:1080px){ 
+  #photo .photo-logos img{ height: 22px } 
+}
+
+/* Gallery 页面标题样式 */
+.gallery .section-head h1 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+}
 
 .left-inline { display:flex; align-items:center; gap:8px }
